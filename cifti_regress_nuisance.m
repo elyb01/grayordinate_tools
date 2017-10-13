@@ -1,6 +1,6 @@
 % cifti_regress_nuisance(incifti,nreg,outcifti)
 %
-% version 1.0, 5/17/17
+% version 1.1, 10/12/17
 % Created by Ely (benjamin dot ely at mssm dot edu)
 % Based on fix_3_clean.m from ICA-FIX; also owes much to the NITRC conn toolbox
 %
@@ -12,20 +12,15 @@
 % Requires the HCP Pipeline gifti/cifti library (see https://wiki.humanconnectome.org/display/PublicData/HCP+Users+FAQ)
 %
 % incifti = filename of input cifti data (*.dtseries.nii)
-% nreg = input nuisance regressor(s) data (*.mat), with each regressor as a separate column % will add .txt/.csv support later
+% nreg = input nuisance regressor(s) data (*.mat or *.txt), with each regressor as a separate column
 % outcifti = filename of output cifti data (*.dtseries.nii)
 
 %% declare function
 function cifti_regress_nuisance(incifti,nreg,outcifti)
 
-%% adjust these settings for your environment:
-<<<<<<< HEAD
+%% point to Connectome Workbench executable for your environment:
 WBC='/Users/ely/Dropbox/SCIENCE/Software/workbench/bin_macosx64/wb_command';
 %WBC='/hpc/packages/minerva-common/connectome/1.2.3/workbench/bin_rh_linux64/wb_command';
-=======
-%WBC='/Users/ely/Dropbox/SCIENCE/Software/workbench/bin_macosx64/wb_command';
-WBC='/hpc/packages/minerva-common/connectome/1.2.3/workbench/bin_rh_linux64/wb_command';
->>>>>>> 09ae60e414c83c24dbce5895d8a77554ca7b1554
 
 %% read CIFTI data
 if exist(incifti,'file') == 2
@@ -37,7 +32,19 @@ end
 
 %% read nuisance regressor data
 if exist(nreg,'file') == 2
-	NR=cell2mat(struct2cell(load(nreg)));
+	[filepath,name,ext] = fileparts(nreg);
+%	fprintf('filepath=%s\nname=%s\next=%s',filepath,name,ext);
+	if ext=='.mat'
+		NR=cell2mat(struct2cell(load(nreg)));
+	elseif ext=='.txt'
+		NR=load(nreg);
+		[r,c]=size(NR);
+		if c>r
+			NR=NR'; % transpose if more columns than rows
+		end
+	else
+		error('input nuisance regressor filetype not supported, must be .mat or .txt');
+	end
 else
 	error('input nuisance regressor file not found');
 end
@@ -50,16 +57,4 @@ outc.cdata = inc.cdata - (normNR * (pinv(normNR,1e-6) * inc.cdata'))';
 
 %% save cleaned data to file
 ciftisave(outc,outcifti,WBC);
-
-%% BONEYARD
-% Soft regression - code below gives same output as hard regression
-%function cifti_regress_nuisance(incifti,nreg,aggro,outcifti)
-%if strcmp(aggro,'hard')
-%	sprintf('hard regression')
-%	outc.cdata = inc.cdata - (normNR * (pinv(normNR,1e-6) * inc.cdata'))';
-%elseif strcmp(aggro,'soft')
-%	sprintf('soft regression')
-%	betaNR = pinv(normNR,1e-6) * inc.cdata';	% beta for nuisance regressors
-%	outc.cdata = inc.cdata - (normNR * betaNR)';    % cleanup
-%end
 
