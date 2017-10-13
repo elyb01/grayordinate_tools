@@ -19,8 +19,13 @@
 function cifti_regress_nuisance(incifti,nreg,outcifti)
 
 %% adjust these settings for your environment:
+<<<<<<< HEAD
+WBC='/Users/ely/Dropbox/SCIENCE/Software/workbench/bin_macosx64/wb_command';
+%WBC='/hpc/packages/minerva-common/connectome/1.2.3/workbench/bin_rh_linux64/wb_command';
+=======
 %WBC='/Users/ely/Dropbox/SCIENCE/Software/workbench/bin_macosx64/wb_command';
 WBC='/hpc/packages/minerva-common/connectome/1.2.3/workbench/bin_rh_linux64/wb_command';
+>>>>>>> 09ae60e414c83c24dbce5895d8a77554ca7b1554
 
 %% read CIFTI data
 if exist(incifti,'file') == 2
