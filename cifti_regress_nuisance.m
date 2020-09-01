@@ -1,7 +1,7 @@
 % cifti_regress_nuisance(incifti,nreg,outcifti)
 %
 % version 1.1, 10/12/17
-% Created by Ely (benjamin dot ely at mssm dot edu)
+% Created by Ely
 % Based on fix_3_clean.m from ICA-FIX; also owes much to the NITRC conn toolbox
 %
 % Removes nuisance regressors from CIFTI data and saves the residuals as a new CIFTI file

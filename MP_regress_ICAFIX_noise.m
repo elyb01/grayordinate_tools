@@ -1,7 +1,7 @@
 %% MP_regress_ICAFIX_noise(subdir,fixlist,aggressive,hp)
 %
 % version 1.0, 31 Aug 2020
-% Created by Ely (benjamin dot ely at einsteinmed dot edu)
+% Created by BA Ely
 % Removes sICA-FIX noise components from pseudo-NIFTI format movement parameter data and saves the residuals
 % outputs can  then be converted to a .txt MP file and regresssed out of target NIFTI/CIFTI files withtout re-introducing variance from noise components
 % Generally only needed for after-the-fact MP regression of multi-run ICA-FIX denoised data without simultaneous MP regression
